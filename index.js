@@ -22,7 +22,7 @@ global.NashBoT = {
 };
 
 global.NashBot = {
-  ZEN: "https://zen-api.up.raileay.app/",
+  ZEN: "https://zen-api.up.railway.app/",
   Zen: "https://kaiz-apis.gleeze.com/"
 };
 
