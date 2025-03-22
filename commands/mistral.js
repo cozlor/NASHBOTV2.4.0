@@ -1,14 +1,14 @@
 const axios = require("axios");
 
 module.exports = {
-    name: "ai",
-    description: "Interact with ChatGPT-4",
+    name: "mistral",
+    description: "Mistral-SABA-24B AI",
     nashPrefix: false,
     version: "1.0.0",
     cooldowns: 5,
-    aliases: ["gpt4"],
+    aliases: ["mistral"],
     usage: "[prompt]",
-    example: "ai what is the capital of France?",
+    example: "mistral what is the capital of France?",
     category: "AI",
     execute: async (api, event, args, prefix) => {
         const { threadID, messageID } = event;
@@ -21,9 +21,9 @@ module.exports = {
         }
 
         try {
-            const info = await api.sendMessage({body: "[ ChatGPT-4 ]\n\nPlease wait..."}, threadID, messageID);
+            const info = await api.sendMessage({body: "[ Mistral-SABA-24B ]\n\nPlease wait..."}, threadID, messageID);
 
-            const response = await axios.get(`${global.NashBot.ZEN}api/chatgpt4?prompt=${encodeURIComponent(prompt)}`);
+            const response = await axios.get(`${global.NashBot.ZEN}api/mistral-saba-24b?query=${encodeURIComponent(prompt)}`);
             const reply = response.data.response;
 
             api.editMessage(reply, info.messageID);

@@ -1,35 +1,32 @@
 const axios = require("axios");
 
 module.exports = {
-    name: "ai",
-    description: "Interact with ChatGPT-4",
+    name: "metaai",
+    description: "Interact with Meta AI (Llama)",
     nashPrefix: false,
     version: "1.0.0",
     cooldowns: 5,
-    aliases: ["gpt4"],
+    aliases: [],
     usage: "[prompt]",
-    example: "ai what is the capital of France?",
+    example: "metaai Tell me a story.",
     category: "AI",
     execute: async (api, event, args, prefix) => {
         const { threadID, messageID } = event;
         let prompt = args.join(" ");
 
         if (!prompt) {
-            return api.sendMessage({
+            api.sendMessage({
                 body: "Please enter a prompt. Example: `" + prefix + (module.exports.name || "") + " " + (module.exports.example ? module.exports.example.split(" ").slice(1).join(" ") : "") + "`"
             }, threadID, messageID);
+            return;
         }
 
         try {
-            const info = await api.sendMessage({body: "[ ChatGPT-4 ]\n\nPlease wait..."}, threadID, messageID);
-
-            const response = await axios.get(`${global.NashBot.ZEN}api/chatgpt4?prompt=${encodeURIComponent(prompt)}`);
-            const reply = response.data.response;
-
+            const info = await api.sendMessage({body: "[ Meta AI (Llama) ]\n\nPlease wait..."}, threadID, messageID);
+            const response = await axios.get(`${global.NashBot.ZEN}api/metaai?prompt=${encodeURIComponent(prompt)}`);
+            let reply = response.data;
             api.editMessage(reply, info.messageID);
-
         } catch (error) {
-            console.error("Error fetching data:", error.message);
             api.sendMessage({body: "Failed to fetch data. Please try again later.\n\nError: " + error.message}, threadID, messageID);
         }
     },

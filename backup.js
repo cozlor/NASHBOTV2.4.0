@@ -22,38 +22,13 @@ global.NashBoT = {
 };
 
 global.NashBot = {
-  ZEN: "https://zen-api.up.raileay.app/",
-  Zen: "https://kaiz-apis.gleeze.com/"
+  JOSHUA: "https://nash-api-vrx5.onrender.com/"
 };
 
 let isLoggedIn = false;
 let loginAttempts = 0;
 const MAX_RETRIES = 5;
 const RETRY_INTERVAL = 5000;
-
-const userAgents = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Edg/120.0.2210.77",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-    "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:114.0) Gecko/20100101 Firefox/114.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:114.0) Gecko/20100101 Firefox/114.0",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.51",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (iPad; CPU OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Linux; Android 11; SM-A127F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36",
-];
-
-const getRandomUserAgent = () => {
-    return userAgents[Math.floor(Math.random() * userAgents.length)];
-};
 
 const loadModules = (type) => {
   const folderPath = path.join(__dirname, type);
@@ -83,13 +58,7 @@ const AutoLogin = async () => {
   const appStatePath = path.join(__dirname, "appstate.json");
   if (fs.existsSync(appStatePath)) {
     const appState = JSON.parse(fs.readFileSync(appStatePath, "utf8"));
-
-    const loginOptions = {
-      appState: appState,
-      userAgent: getRandomUserAgent(),
-    };
-
-    login(loginOptions, (err, api) => {
+    login({ appState }, (err, api) => {
       if (err) {
         console.error(
           chalk.bold.gray("[") + 
@@ -106,13 +75,6 @@ const AutoLogin = async () => {
       isLoggedIn = true;
       loginAttempts = 0;
     });
-  } else {
-    console.error(
-      chalk.bold.gray("[") +
-      chalk.bold.red("ERROR") +
-      chalk.bold.gray("] ") +
-      chalk.bold.redBright("appstate.json not found. Please login manually first.")
-    );
   }
 };
 
@@ -144,7 +106,6 @@ const setupBot = (api, prefix) => {
     selfListen: true,
     autoReconnect: true,
     listenEvents: true,
-    userAgent: getRandomUserAgent(),
   });
 
   api.listenMqtt((err, event) => {
