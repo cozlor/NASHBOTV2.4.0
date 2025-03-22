@@ -26,7 +26,7 @@ module.exports = {
             (err, info) => {
                 if (err) return;
 
-                axios.get(`${global.NashBot.JOSHUA}api/gemma-7b-it?query=${encodeURIComponent(prompt)}`)
+                axios.get(`${global.NashBot.ZEN}api/gemma-7b-it?query=${encodeURIComponent(prompt)}`)
                     .then(response => {
                         const reply = response.data.response;
                         api.editMessage(
